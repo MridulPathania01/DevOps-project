@@ -22,15 +22,15 @@ jobs:
 
       - name: Authenticate Docker with AWS ECR
         run: |
-          aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com
+          aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com
 
       - name: Build and Push Docker Image
         run: |
           docker build -t mobile-backend:latest .
-          docker tag mobile-backend:latest <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest
-          docker push <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest
+          docker tag mobile-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest
 
       - name: Deploy with Terraform
         run: |
           terraform init
-          terraform apply -var="docker_image_url=<AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest" -auto-approve
+          terraform apply -var="docker_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest" -auto-approve
