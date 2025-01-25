@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask API Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hi, man</h1>
+
+    <h2>What is your name </h2>
+    <form id="add-item-form">
+        <label for="item-name">Name:</label>
+        <input type="text" id="item-name" name="name" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Name</h2>
+    <div id="items-container">
+        <p>No one here.</p>
+    </div>
+
+    <script>
+        const apiUrl = '/api/items';
+        const form = document.getElementById('add-item-form');
+        const itemsContainer = document.getElementById('items-container');
+
+        // Fetch and display items
+        async function fetchItems() {
+            const response = await fetch(apiUrl);
+            const items = await response.json();
+
+            itemsContainer.innerHTML = '';
+            if (items.length === 0) {
+                itemsContainer.innerHTML = '<p>No items available.</p>';
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.textContent = `${index + 1}. ${item.name}`;
+                itemsContainer.appendChild(itemDiv);
+            });
+        }
+
+        // Add a new item
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const itemName = document.getElementById('item-name').value;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: itemName })
+            });
+
+            if (response.ok) {
+                form.reset();
+                fetchItems();
+            } else {
+                <!-- alert('Failed to add Name.'); -->
+            }
+        });
+
+        // Initial fetch
+        fetchItems();
+    </script>
+</body>
+</html>
