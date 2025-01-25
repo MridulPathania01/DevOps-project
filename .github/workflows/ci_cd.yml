@@ -25,11 +25,11 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t mridulpathania/flask-backend:latest .
-          docker tag mobile-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest
+          docker build -t mridulpathania/flask-backend:latest
+          docker tag mobile-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest
 
       - name: Deploy with Terraform
         run: |
           terraform init
-          terraform apply -var="docker_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mobile-backend:latest" -auto-approve
+          terraform apply -var="docker_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest" -auto-approve
