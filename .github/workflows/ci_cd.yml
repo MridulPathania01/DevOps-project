@@ -28,6 +28,10 @@ jobs:
           docker build -t mridulpathania/flask-backend:latest .
           docker tag mridulpathania/flask-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
 
       - name: Deploy with Terraform
         run: |
