@@ -16,8 +16,8 @@ jobs:
       - name: Set Up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # GitHub Secrets
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # GitHub Secrets
           aws-region: ap-south-1
 
       - name: Authenticate Docker with AWS ECR
@@ -30,14 +30,17 @@ jobs:
           docker tag mridulpathania/flask-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest
 
+      # Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.6
 
-      # Pass the API Key as a variable to Terraform
       - name: Deploy with Terraform
         run: |
           terraform init
-          terraform apply -var="docker_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest" -var="api_key=${{ secrets.API_KEY }}" -auto-approve
+          terraform apply -var="docker_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest" \
+                           -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+                           -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+                           -auto-approve
         working-directory: terraform
