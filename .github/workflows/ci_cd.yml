@@ -42,5 +42,6 @@ jobs:
           terraform apply -var="docker_image_url=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/mridulpathania/flask-backend:latest" \
                            -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
                            -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+                           -var="api_key=${{ secrets.MY_API_KEY }}" \
                            -auto-approve
         working-directory: terraform
