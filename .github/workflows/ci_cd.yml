@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Change to Terraform Directory (if needed)
+        run: cd terraform 
 
       - name: Set Up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
