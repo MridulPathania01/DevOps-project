@@ -74,11 +74,3 @@ terraform plan
 terraform apply
 
 
-
-
-
-
-
-
-
-
